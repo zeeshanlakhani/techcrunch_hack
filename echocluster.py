@@ -25,7 +25,7 @@ def timbrecluster(segments,no_clusters):
 	t_mat = np.concatenate((t_timbre, t_diff1,t_diff2), axis=0)
 	features = t_mat.conj().transpose() #final matrix
 	####################################
-	features = whiten(features)
+	#features = whiten(features)
 	try:
 		codebook = kmeans(features, no_clusters, iter=60)
 		idx, dists = vq(features, codebook[0])
@@ -39,10 +39,23 @@ def timbrecluster(segments,no_clusters):
 		pylab.scatter(codebook[0][:,0],codebook[0][:,1], marker='o', s = 500, linewidths=2, c='none')
 		pylab.scatter(codebook[0][:,0],codebook[0][:,1], marker='x', s = 500, linewidths=2)
 		pylab.savefig('kmeans.png')
-		clusters = [x for x in clusters if x != []]
 		return clusters
 	except (TypeError,NameError,ValueError):
 		print "error"
+		
+def pitchcluster(segments,no_clusters):
+	features = np.array([i.pitches for i in segments])	
+	try:
+		codebook = kmeans(features, no_clusters, iter=60)
+		idx, dists = vq(features, codebook[0])
+		clusters = [[] for cluster in range(no_clusters)]
+		for i in range(len(idx)):
+			clusters[idx[i]].append(segments[i])
+		return clusters
+	except (TypeError,NameError,ValueError):
+		print "error"
+	####################################
+	#features = whiten(features)
 	
 def output_clusters(file, remix):
 	out = audio.getpieces(file,remix)
@@ -99,13 +112,17 @@ def htmlmapping(tclusters, gotags):
 		
 	
 if __name__=='__main__':
+	url = sys.argv[1]
 	track = audio.LocalAudioFile(sys.argv[2])
 	segments = track.analysis.segments
 	tclusters = timbrecluster(segments,12)
 	tclusters = rankbrightness(tclusters)
-	url = sys.argv[1]
+	
+	pclusters = pitchcluster(segments,12)
+	pclusters = rankbrightness(pclusters)
+	
 	gotags = theparse(url)
-	remix = htmlmapping(tclusters,gotags)
+	remix = htmlmapping(pclusters,gotags)
 	output_clusters(track, remix)
 	return_code = subprocess.call(["afplay", audio_file])
 	
