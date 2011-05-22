@@ -122,7 +122,7 @@ if __name__=='__main__':
 	pclusters = rankbrightness(pclusters)
 	
 	gotags = theparse(url)
-	remix = htmlmapping(pclusters,gotags)
+	remix = htmlmapping(tclusters,gotags)
 	output_clusters(track, remix)
 	return_code = subprocess.call(["afplay", audio_file])
 	
