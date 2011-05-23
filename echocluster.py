@@ -126,16 +126,15 @@ def htmlmapping(tclusters, gotags):
 	
 if __name__=='__main__':
 	url = sys.argv[1]
+	#whichcluster = sys.argv[3]
 	track = audio.LocalAudioFile(sys.argv[2])
 	segments = track.analysis.segments
 	tclusters = timbrecluster(segments,12)
 	tclusters = rankbrightness(tclusters)
-	
 	pclusters = pitchcluster(segments,9)
 	pclusters = rankbrightness(pclusters)
-	
 	gotags = theparse(url)
-	remix = htmlmapping(pclusters,gotags)
+	remix = htmlmapping(tclusters,gotags)
 	output_clusters(track, remix)
 	return_code = subprocess.call(["afplay", audio_file])
 	
