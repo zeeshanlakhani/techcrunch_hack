@@ -35,10 +35,10 @@ def timbrecluster(segments,no_clusters):
 			clusters[idx[i]].append(segments[i])
 		#########map the clusters
 		#colors = ([([0.4,1,0.4],[1,0.4,0.4],[0.1,0.8,1],[0.4,1,0.4],[1,0.4,0.4],[0.1,0.8,1],[0.4,1,0.4],[1,0.4,0.4],[0.1,0.8,1])[i] for i in idx])
-		pylab.scatter(features[:,0],features[:,1])
-		pylab.scatter(codebook[0][:,0],codebook[0][:,1], marker='o', s = 500, linewidths=2, c='none')
-		pylab.scatter(codebook[0][:,0],codebook[0][:,1], marker='x', s = 500, linewidths=2)
-		pylab.savefig('kmeans.png')
+		# pylab.scatter(features[:,0],features[:,1])
+		# pylab.scatter(codebook[0][:,0],codebook[0][:,1], marker='o', s = 500, linewidths=2, c='none')
+		# pylab.scatter(codebook[0][:,0],codebook[0][:,1], marker='x', s = 500, linewidths=2)
+		# pylab.savefig('kmeans.png')
 		return clusters
 	except (TypeError,NameError,ValueError):
 		print "error"
@@ -51,6 +51,11 @@ def pitchcluster(segments,no_clusters):
 		clusters = [[] for cluster in range(no_clusters)]
 		for i in range(len(idx)):
 			clusters[idx[i]].append(segments[i])
+		colors = ([([0.5,1,0.1],[0.5,0.5,0.5],[0.1,0.2,1],[0.4,1,0.1],[.8,0.4,1],[0.1,0.8,.5],[0.1,1,0.9],[1,1,0.4],[0.1,1,.7])[i] for i in idx])
+		pylab.scatter(features[:,1],features[:,2], c=colors)
+		pylab.scatter(codebook[0][:,1],codebook[0][:,2], marker='o', s = 500, linewidths=2, c='none')
+		pylab.scatter(codebook[0][:,1],codebook[0][:,2], marker='x', s = 500, linewidths=2)
+		pylab.savefig('kmeans.png')
 		return clusters
 	except (TypeError,NameError,ValueError):
 		print "error"
@@ -93,13 +98,21 @@ def htmlmapping(tclusters, gotags):
 	current_tag = ''
 	remixme = []
 	current_clust = 0
+	count = 0
 	# print tclusters[9]
 	# print tclusters[9][random.randint(0,len(tclusters[9]) - 1)]
 	for tag in gotags:
 		if current_tag == tag:
-			remixme.append(tclusters[current_clust][random.randint(0,len(tclusters[current_clust]) - 1)])
+			#remixme.append(tclusters[current_clust][random.randint(0,len(tclusters[current_clust]) - 1)])
+			if count < len(tclusters[current_clust]) - 1:
+				remixme.append(tclusters[current_clust][count])
+				count+=1
+			else:
+				count = 0
+				remixme.append(tclusters[current_clust][count])
 		else:
 			current_tag = tag
+			count = 0
 			if current_clust < len(tclusters) - 1:
 				current_clust += 1
 			else:
@@ -118,11 +131,11 @@ if __name__=='__main__':
 	tclusters = timbrecluster(segments,12)
 	tclusters = rankbrightness(tclusters)
 	
-	pclusters = pitchcluster(segments,12)
+	pclusters = pitchcluster(segments,9)
 	pclusters = rankbrightness(pclusters)
 	
 	gotags = theparse(url)
-	remix = htmlmapping(tclusters,gotags)
+	remix = htmlmapping(pclusters,gotags)
 	output_clusters(track, remix)
 	return_code = subprocess.call(["afplay", audio_file])
 	
