@@ -9,9 +9,9 @@ WebRemix! is a url-page audio remixer (currently, only available as script, will
 
 #### Sound samples
 
-[original file](https://github.com/zeeshanlakhani/)
+[original file](http://dl.dropbox.com/u/13241544/canon.mp3)
 
-[remixed google.com - timbre clusters](https://github.com/zeeshanlakhani/)
+[remixed google.com - timbre clusters](http://dl.dropbox.com/u/13241544/remix.wav)
 
 ##### I apologize ahead of time for any chaotic or bad code!
 
