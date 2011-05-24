@@ -8,7 +8,6 @@ import scipy.misc
 from scipy.cluster.vq import vq, kmeans2, whiten, kmeans
 import pylab
 from BeautifulSoup import BeautifulSoup as BSS
-import re
 import urllib2
 import random
 import subprocess
@@ -33,12 +32,11 @@ def timbrecluster(segments,no_clusters):
 		for i in range(len(idx)):
 			#segments[i].dist = int((dists[i]-min(dists)) * 100.0 / (max(dists) - min(dists)))
 			clusters[idx[i]].append(segments[i])
-		#########map the clusters
+		#########map the clusters with certain dimensions
 		#colors = ([([0.4,1,0.4],[1,0.4,0.4],[0.1,0.8,1],[0.4,1,0.4],[1,0.4,0.4],[0.1,0.8,1],[0.4,1,0.4],[1,0.4,0.4],[0.1,0.8,1])[i] for i in idx])
 		# pylab.scatter(features[:,0],features[:,1])
 		# pylab.scatter(codebook[0][:,0],codebook[0][:,1], marker='o', s = 500, linewidths=2, c='none')
 		# pylab.scatter(codebook[0][:,0],codebook[0][:,1], marker='x', s = 500, linewidths=2)
-		# pylab.savefig('kmeans.png')
 		return clusters
 	except (TypeError,NameError,ValueError):
 		print "error"
@@ -51,11 +49,12 @@ def pitchcluster(segments,no_clusters):
 		clusters = [[] for cluster in range(no_clusters)]
 		for i in range(len(idx)):
 			clusters[idx[i]].append(segments[i])
-		colors = ([([0.5,1,0.1],[0.5,0.5,0.5],[0.1,0.2,1],[0.4,1,0.1],[.8,0.4,1],[0.1,0.8,.5],[0.1,1,0.9],[1,1,0.4],[0.1,1,.7])[i] for i in idx])
-		pylab.scatter(features[:,1],features[:,2], c=colors)
-		pylab.scatter(codebook[0][:,1],codebook[0][:,2], marker='o', s = 500, linewidths=2, c='none')
-		pylab.scatter(codebook[0][:,1],codebook[0][:,2], marker='x', s = 500, linewidths=2)
-		pylab.savefig('kmeans.png')
+		#########map the clusters with certain dimensions
+		# colors = ([([0.5,1,0.1],[0.5,0.5,0.5],[0.1,0.2,1],[0.4,1,0.1],[.8,0.4,1],[0.1,0.8,.5],[0.1,1,0.9],[1,1,0.4],[0.1,1,.7])[i] for i in idx])
+		# pylab.scatter(features[:,1],features[:,2], c=colors)
+		# pylab.scatter(codebook[0][:,1],codebook[0][:,2], marker='o', s = 500, linewidths=2, c='none')
+		# pylab.scatter(codebook[0][:,1],codebook[0][:,2], marker='x', s = 500, linewidths=2)
+		# pylab.savefig('kmeans.png')
 		return clusters
 	except (TypeError,NameError,ValueError):
 		print "error"
